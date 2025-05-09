@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'nip' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -39,17 +39,13 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
-
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
-
+        if (! Auth::attempt(['nip' => $this->nip, 'password' => $this->password], $this->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'nip' => __('NIP atau password salah.'),
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        $this->session()->regenerate();
     }
 
     /**
@@ -80,6 +76,7 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('nip')).'|'.$this->ip());
+
     }
 }
