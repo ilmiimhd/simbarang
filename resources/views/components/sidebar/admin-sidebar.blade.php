@@ -16,7 +16,7 @@
       </button>
 
       {{-- Brand --}}
-      <a href="{{ url('/') }}" class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
+      <a href="{{ route('admin.dashboard') }}" class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0">
         SIMBARANG
       </a>
 
@@ -48,50 +48,30 @@
         {{-- Divider --}}
         <hr class="my-4 md:min-w-full" />
 
-        {{-- Menu Section (Admin Layout Pages) --}}
+        {{-- Menu Admin --}}
         <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-          Admin Layout Pages
+          Menu Admin
         </h6>
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-          @php
-              $menus = [
-                  ['label' => 'Dashboard', 'icon' => 'fas fa-tv', 'route' => 'admin/dashboard'],
-                  ['label' => 'Settings', 'icon' => 'fas fa-tools', 'route' => 'admin/settings'],
-                  ['label' => 'Tables', 'icon' => 'fas fa-table', 'route' => 'admin/tables'],
-                  ['label' => 'Maps', 'icon' => 'fas fa-map-marked', 'route' => 'admin/maps'],
-              ];
-          @endphp
-          @foreach ($menus as $menu)
-            <li class="items-center">
-              <a href="{{ url($menu['route']) }}"
-                class="text-xs uppercase py-3 font-bold block {{ request()->is($menu['route']) ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
-                <i class="{{ $menu['icon'] }} mr-2 text-sm {{ request()->is($menu['route']) ? 'opacity-75' : 'text-blueGray-300' }}"></i>
-                {{ $menu['label'] }}
-              </a>
-            </li>
-          @endforeach
-        </ul>
-
-        {{-- Divider + Auth Layout --}}
-        <hr class="my-4 md:min-w-full" />
-        <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-          Auth Layout Pages
-        </h6>
-        <ul class="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-          <li>
-            <a href="{{ route('login') }}" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-              <i class="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i> Login
+          {{-- Dashboard --}}
+          <li class="items-center">
+            <a href="{{ route('admin.dashboard') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('admin.dashboard') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-tv mr-2 text-sm {{ request()->routeIs('admin.dashboard') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Dashboard
             </a>
           </li>
-          <li>
-            <a href="{{ route('register') }}" class="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block">
-              <i class="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i> Register
+
+          {{-- Permintaan Akun --}}
+          <li class="items-center">
+            <a href="{{ route('admin.request.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('admin.request.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-user-plus mr-2 text-sm {{ request()->routeIs('admin.request.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Permintaan Akun
             </a>
           </li>
         </ul>
 
-        {{-- Optional: Tambahan No Layout / Docs Section --}}
-        {{-- Bisa ditambahkan kalau perlu --}}
       </div>
     </div>
   </nav>

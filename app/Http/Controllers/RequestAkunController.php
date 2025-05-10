@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class RequestAkunController extends Controller
 {
-    // Tampilkan form request akun
+    // Tampilkan form permintaan akun
     public function create()
     {
         return view('auth.request-akun');
     }
 
-    // Proses penyimpanan form
+    // Simpan permintaan akun ke database
     public function store(Request $request)
     {
         $request->validate([
@@ -25,12 +25,12 @@ class RequestAkunController extends Controller
         ]);
 
         DB::table('requests')->insert([
-            'nama'     => $request->nama,
-            'nip'      => $request->nip,
-            'jabatan'  => $request->jabatan,
-            'instansi' => $request->instansi,
-            'email'    => $request->email,
-            'status'   => 'pending',
+            'nama'       => $request->nama,
+            'nip'        => $request->nip,
+            'jabatan'    => $request->jabatan,
+            'instansi'   => $request->instansi,
+            'email'      => $request->email,
+            'status'     => 'pending',
             'created_at' => now(),
         ]);
 
