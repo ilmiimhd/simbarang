@@ -13,7 +13,6 @@
           stat-icon-name="fas fa-user-clock"
           stat-icon-color="bg-emerald-500"
           stat-arrow="up"
-          stat-percent="100%"
           stat-percent-color="text-emerald-500"
           stat-descripiron="Status pending"
         />
@@ -27,7 +26,6 @@
           stat-icon-name="fas fa-check-circle"
           stat-icon-color="bg-blue-500"
           stat-arrow="up"
-          stat-percent="100%"
           stat-percent-color="text-blue-500"
           stat-descripiron="Status approved"
         />
@@ -41,7 +39,6 @@
           stat-icon-name="fas fa-times-circle"
           stat-icon-color="bg-red-500"
           stat-arrow="down"
-          stat-percent="100%"
           stat-percent-color="text-red-500"
           stat-descripiron="Status rejected"
         />
@@ -55,7 +52,6 @@
           stat-icon-name="fas fa-users"
           stat-icon-color="bg-indigo-500"
           stat-arrow="up"
-          stat-percent="100%"
           stat-percent-color="text-indigo-500"
           stat-descripiron="Akun terdaftar"
         />

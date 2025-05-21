@@ -2,7 +2,7 @@
   'statSubtitle' => 'Traffic',
   'statTitle' => '350,897',
   'statArrow' => 'up',
-  'statPercent' => '3.48',
+  'statPercent' => ' ',
   'statPercentColor' => 'text-emerald-500',
   'statDescripiron' => 'Since last month',
   'statIconName' => 'far fa-chart-bar',
@@ -29,7 +29,7 @@
     <p class="text-sm text-blueGray-400 mt-4">
       <span class="{{ $statPercentColor }} mr-2">
         <i class="{{ $statArrow === 'up' ? 'fas fa-arrow-up' : ($statArrow === 'down' ? 'fas fa-arrow-down' : '') }}"></i>
-        {{ $statPercent }}%
+        {{ $statPercent }}
       </span>
       <span class="whitespace-nowrap">
         {{ $statDescripiron }}

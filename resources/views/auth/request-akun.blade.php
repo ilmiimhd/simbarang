@@ -13,10 +13,29 @@
         </div>
         <div class="flex-auto px-4 lg:px-10 pt-4 pb-8">
           
+        {{-- Sweet Alert --}}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         @if (session('success'))
-          <div class="bg-emerald-100 border border-emerald-400 text-emerald-700 px-4 py-2 rounded mb-4 text-sm">
-            {{ session('success') }}
-          </div>
+          <script>
+            Swal.fire({
+              icon: 'success',
+              title: 'Permintaan Berhasil Dikirim!',
+              text: '{{ session('success') }}',
+              confirmButtonColor: '#0ea5e9'
+            });
+          </script>
+        @endif
+
+        @if ($errors->any())
+          <script>
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Tolong periksa kembali data yang kamu isi ya!',
+              confirmButtonColor: '#ef4444'
+            });
+          </script>
         @endif
 
           <div class="text-blueGray-400 text-center mb-6 font-bold">
@@ -71,7 +90,9 @@
             </div>
 
             <div class="text-center mt-6">
-              <button type="submit"
+              <button
+                type="button"
+                onclick="confirmSubmit()"
                 class="bg-blueGray-800 text-white text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg w-full transition duration-150">
                 Kirim Permintaan Akun
               </button>
@@ -83,4 +104,24 @@
     </div>
   </div>
 </div>
+
+<script>
+  function confirmSubmit() {
+    Swal.fire({
+      title: 'Kirim Permintaan?',
+      text: "Pastikan semua data sudah benar ya!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#0ea5e9',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Kirim',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.querySelector('form').submit();
+      }
+    });
+  }
+</script>
+
 @endsection

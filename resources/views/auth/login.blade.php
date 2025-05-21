@@ -24,6 +24,12 @@
             <small> Silakan login menggunakan NIP dan Password Anda untuk mengakses sistem.</small>
           </div>
 
+          @if(session('error'))
+            <p class="text-red-500 text-sm mb-4 animate-fade-in" id="login-error">
+              {{ session('error') }}
+            </p>
+          @endif
+
           <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="relative w-full mb-3">
@@ -43,17 +49,23 @@
               <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                placeholder="Password"
-                required
-                autocomplete="current-password"
-              />
+              <div class="relative">
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  class="border-0 px-3 py-3 pr-10 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  placeholder="Password"
+                  required
+                  autocomplete="current-password"
+                />
+                <button type="button" onclick="togglePassword()" class="absolute right-3 top-3 text-blueGray-400 hover:text-blueGray-600 focus:outline-none">
+                  <i id="eye-icon" class="fas fa-eye"></i>
+                </button>
+              </div>
             </div>
-            <div>
-              <!-- <label class="inline-flex items-center cursor-pointer">
+            <!-- <div>
+              <label class="inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
                   name="remember"
@@ -62,9 +74,8 @@
                 <span class="ml-2 text-sm font-semibold text-blueGray-600">
                   Ingat saya
                 </span>
-              </label> -->
-            </div>
-
+              </label>
+            </div> -->
             <div class="text-center mt-6">
               <button
                 type="submit"
@@ -79,4 +90,31 @@
     </div>
   </div>
 </div>
+
+<script>
+  function togglePassword() {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('eye-icon');
+    
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+
+  // auto dismiss alert login error
+  const errorMsg = document.getElementById('login-error');
+  if (errorMsg) {
+    setTimeout(() => {
+      errorMsg.style.transition = 'opacity 0.5s ease';
+      errorMsg.style.opacity = 0;
+    }, 3000); // hilang setelah 3 detik
+  }
+</script>
+
 @endsection

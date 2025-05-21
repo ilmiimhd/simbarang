@@ -34,6 +34,6 @@ class RequestAkunController extends Controller
             'created_at' => now(),
         ]);
 
-        return redirect()->route('request-akun.form')->with('success', 'Permintaan akun berhasil dikirim. Tunggu verifikasi dari admin.');
+        return redirect()->route('request-akun.form')->with('success', 'Mohon tunggu verifikasi dari admin.');
     }
 }

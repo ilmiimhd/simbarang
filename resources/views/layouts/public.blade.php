@@ -17,10 +17,12 @@
     <!-- Styles -->
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @vite('resources/css/app.css')
+
 </head>
 <body class="antialiased bg-white text-gray-800">
     <main>
         @yield('content')
     </main>
+    @yield('scripts')
 </body>
 </html>

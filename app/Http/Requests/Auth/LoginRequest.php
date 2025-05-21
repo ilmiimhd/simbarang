@@ -40,8 +40,9 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         if (! Auth::attempt(['nip' => $this->nip, 'password' => $this->password], $this->boolean('remember'))) {
+            session()->flash('error', 'NIP atau password salah.');
             throw ValidationException::withMessages([
-                'nip' => __('NIP atau password salah.'),
+                'nip' => __('auth.failed'),
             ]);
         }
 
