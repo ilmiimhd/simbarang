@@ -8,10 +8,36 @@ use Illuminate\Http\Request;
 
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::all();
-        return view('staff.barang.index', compact('barangs'));
+        $query = Barang::query();
+
+        $subkategoris = Barang::select('subkategori')->distinct()->pluck('subkategori');
+
+        if ($request->has('search') || $request->has('subkategori') || $request->has('jenis')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_barang', 'like', $search . '%')
+                ->orWhere('nama_barang', 'like', '% ' . $search . '%')
+                ->orWhere('nama_barang', 'like', '%' . $search . '%');
+            });
+
+            if ($request->subkategori) {
+                $query->where('subkategori', $request->subkategori);
+            }
+
+            if ($request->jenis) {
+                $query->where('jenis_barang', $request->jenis);
+            }
+        }
+
+        $barangs = $query->get();
+
+        if ($request->ajax()) {
+            return view('staff.barang._table', compact('barangs'))->render();
+        }
+
+        return view('staff.barang.index', compact('barangs', 'subkategoris'));
     }
 
     public function create()

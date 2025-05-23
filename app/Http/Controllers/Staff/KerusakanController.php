@@ -20,6 +20,12 @@ class KerusakanController extends Controller
         $kerusakan = $query->get();
         $status = $request->status;
 
+        // 🧠 Kalau request AJAX (dari filter live), balikin partial table aja
+        if ($request->ajax()) {
+            return view('staff.kerusakan._table', compact('kerusakan'))->render();
+        }
+
+        // 🧠 Kalau bukan AJAX, balikin halaman full
         return view('staff.kerusakan.index', compact('kerusakan', 'status'));
     }
 

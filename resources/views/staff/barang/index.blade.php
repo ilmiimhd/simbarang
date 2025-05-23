@@ -28,10 +28,36 @@
   @endif --}}
 
   {{-- Card Table --}}
-  <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
-    <div class="rounded-t mb-0 px-4 py-3 border-0 bg-blueGray-50">
-      <div class="flex flex-wrap items-center justify-between">
-        <h3 class="font-semibold text-base text-blueGray-700">Tabel Barang</h3>
+  <div x-data="liveBarang()" x-init="fetchTable()" class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+    {{-- Header + Search + Button --}}
+    <div class="rounded-t px-4 py-3 border-b border-blueGray-100 bg-blueGray-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <h3 class="font-semibold text-base text-blueGray-700">Tabel Barang</h3>
+      <div class="flex flex-wrap items-center gap-2">
+        {{-- Dropdown Subkategori --}}
+        <select x-model="subkategori" @change="fetchTable()"
+          class="px-2 py-2 pr-8 border border-blueGray-200 rounded text-xs focus:outline-none">
+          <option value="">Semua Subkategori</option>
+          @foreach ($subkategoris as $kategori)
+            <option value="{{ $kategori }}">{{ $kategori }}</option>
+          @endforeach
+        </select>
+        {{-- Dropdown Jenis Barang --}}
+        <select x-model="jenis" @change="fetchTable()"
+          class="px-2 py-2 pr-8 border border-blueGray-200 rounded text-xs focus:outline-none">
+          <option value="">Semua Jenis</option>
+          <option value="habis_pakai">Habis Pakai</option>
+          <option value="tetap">Tetap</option>
+        </select>
+        {{-- Input Search --}}
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-search text-blueGray-400 text-sm"></i>
+          </div>
+          <input type="text" x-model="search" placeholder="Cari barang..."
+            @input.debounce.500ms="fetchTable()"
+            class="pl-10 pr-4 py-2 border border-blueGray-200 rounded text-xs focus:outline-none focus:ring-2 focus:ring-lightBlue-500 w-52" />
+        </div>
+        {{-- Tombol Tambah --}}
         <a href="{{ route('staff.barang.create') }}"
           class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-4 py-2 rounded shadow transition">
           + Tambah Barang
@@ -39,73 +65,44 @@
       </div>
     </div>
 
-    <div class="block w-full overflow-x-auto rounded-t border-b border-blueGray-100">
-      <table class="items-center w-full bg-transparent border-collapse">
-        <thead>
-          <tr>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Nama
-            </th>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Jenis
-            </th>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Subkategori
-            </th>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Jumlah
-            </th>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Satuan
-            </th>
-            <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b border-blueGray-200 text-left">
-              Aksi
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse ($barangs as $barang)
-            <tr class="hover:bg-blueGray-50">
-              <td class="px-6 py-4 text-sm text-blueGray-700 border-t border-blueGray-100">{{ $barang->nama_barang }}</td>
-              <td class="px-6 py-4 text-sm capitalize border-t border-blueGray-100">{{ str_replace('_', ' ', $barang->jenis_barang) }}</td>
-              <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->subkategori }}</td>
-              <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->jumlah }}</td>
-              <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->satuan }}</td>
-
-              {{-- Aksi --}}
-              <td class="px-6 py-4 border-t border-blueGray-100">
-                <div class="flex items-center space-x-2">
-
-                  {{-- Tombol Edit --}}
-                  <a href="{{ route('staff.barang.edit', $barang->id) }}"
-                    class="text-blue-500 hover:text-blue-700 text-sm" title="Edit">
-                    <i class="fas fa-edit"></i>
-                  </a>
-
-                  {{-- Tombol Delete --}}
-                  <form method="POST" action="{{ route('staff.barang.destroy', $barang->id) }}" class="form-delete">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-500 hover:text-red-700 text-sm btn-delete" data-nama="{{ $barang->nama_barang }}">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="5" class="px-6 py-4 text-center text-blueGray-400 text-sm">Belum ada data barang.</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+    {{-- Table Scrollable --}}
+    <div class="block w-full overflow-x-auto max-h-[500px] overflow-y-auto">
+      <div id="table-container">
+        @include('staff.barang._table')
+      </div>
     </div>
   </div>
 </div>
 @endsection
 
 @section('scripts')
+<script>
+  function liveBarang() {
+    return {
+      search: '{{ request('search') }}',
+      subkategori: '',
+      jenis: '',
+      fetchTable() {
+        const params = new URLSearchParams({
+          search: this.search,
+          subkategori: this.subkategori,
+          jenis: this.jenis
+        });
+
+        fetch(`{{ route('staff.barang.index') }}?${params.toString()}`, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById('table-container').innerHTML = html;
+        });
+      }
+    }
+  }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   @if (session('success'))

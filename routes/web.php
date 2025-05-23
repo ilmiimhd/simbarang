@@ -35,6 +35,7 @@ Route::middleware(['auth', 'isstaff'])->prefix('staff')->name('staff.')->group(f
     Route::delete('/barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
     Route::resource('kerusakan', KerusakanController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::get('pengadaan', [PengadaanController::class, 'index'])->name('pengadaan.index');
+    Route::get('/pengadaan/export', [PengadaanController::class, 'export'])->name('pengadaan.export');
 
     // Dummy sementara buat sidebar biar gak error
     Route::get('/notice', fn () => 'Halaman Notice Pajak')->name('notice.index');
