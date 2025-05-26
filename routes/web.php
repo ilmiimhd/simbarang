@@ -9,7 +9,8 @@ use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
 use App\Http\Controllers\Staff\BarangController;
 use App\Http\Controllers\Staff\KerusakanController;
 use App\Http\Controllers\Staff\PengadaanController;
-
+use App\Http\Controllers\Staff\SkpdController;
+use App\Http\Controllers\Staff\LaporanSkpdController;
 
 // Halaman utama (home page publik)
 Route::get('/', function () {
@@ -36,9 +37,9 @@ Route::middleware(['auth', 'isstaff'])->prefix('staff')->name('staff.')->group(f
     Route::resource('kerusakan', KerusakanController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     Route::get('pengadaan', [PengadaanController::class, 'index'])->name('pengadaan.index');
     Route::get('/pengadaan/export', [PengadaanController::class, 'export'])->name('pengadaan.export');
-
-    // Dummy sementara buat sidebar biar gak error
-    Route::get('/notice', fn () => 'Halaman Notice Pajak')->name('notice.index');
+    Route::resource('skpd', SkpdController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('laporan-skpd', LaporanSkpdController::class)->only(['index', 'create', 'store']);
+    Route::get('/laporan-skpd/export', [LaporanSkpdController::class, 'export'])->name('laporan-skpd.export');
 });
 
 // Form request akun (public)

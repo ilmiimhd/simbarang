@@ -45,7 +45,7 @@
         <div class="mb-4">
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Pilih Barang Tetap</label>
           <select id="barangSelect" name="barang_id" required
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
+            class="block w-full text-sm border border-blueGray-600 rounded">
             <option value="">-- Pilih Barang --</option>
             @foreach ($barangs as $barang)
               <option value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>

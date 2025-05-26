@@ -5,33 +5,20 @@
   <div class="px-4 md:px-10 mx-auto w-full">
     <div class="flex flex-wrap">
 
-      {{-- Card 1: Barang Habis Pakai --}}
+      {{-- Card 1: Total Barang --}}
       <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
         <x-cards.card-stats
-          stat-subtitle="Barang Habis Pakai"
-          stat-title="{{ $totalBarangHabisPakai }}"
-          stat-icon-name="fas fa-box"
-          stat-icon-color="bg-pink-500"
+          stat-subtitle="Total Barang"
+          stat-title="{{ $totalBarang }}"
+          stat-icon-name="fas fa-boxes"
+          stat-icon-color="bg-blueGray-600"
           stat-arrow="up"
-          stat-percent-color="text-pink-500"
-          stat-descripiron="Stok tercatat"
+          stat-percent-color="text-blueGray-600"
+          stat-descripiron="Semua jenis barang"
         />
       </div>
 
-      {{-- Card 2: Barang Tetap --}}
-      <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-        <x-cards.card-stats
-          stat-subtitle="Barang Tetap"
-          stat-title="{{ $totalBarangTetap }}"
-          stat-icon-name="fas fa-chair"
-          stat-icon-color="bg-blue-500"
-          stat-arrow="up"
-          stat-percent-color="text-blue-500"
-          stat-descripiron="Aset terdata"
-        />
-      </div>
-
-      {{-- Card 3: Barang Rusak --}}
+      {{-- Card 2: Barang Rusak --}}
       <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
         <x-cards.card-stats
           stat-subtitle="Barang Rusak"
@@ -44,7 +31,7 @@
         />
       </div>
 
-      {{-- Card 4: Pengadaan Bulan Ini --}}
+      {{-- Card 3: Pengadaan Bulan Ini --}}
       <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
         <x-cards.card-stats
           stat-subtitle="Pengadaan Bulan Ini"
@@ -54,6 +41,19 @@
           stat-arrow="up"
           stat-percent-color="text-emerald-500"
           stat-descripiron="Total pengeluaran"
+        />
+      </div>
+
+      {{-- Card 4: Total Notice Pajak --}}
+      <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+        <x-cards.card-stats
+          stat-subtitle="Total Notice Pajak"
+          stat-title="{{ number_format($totalNoticePajak) }} lembar"
+          stat-icon-name="fas fa-file-invoice"
+          stat-icon-color="bg-yellow-500"
+          stat-arrow="right"
+          stat-percent-color="text-yellow-500"
+          stat-descripiron="Tersedia dari semua kotak"
         />
       </div>
 

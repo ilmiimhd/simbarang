@@ -46,10 +46,10 @@
       </div>
 
         {{-- Divider --}}
-        <hr class="my-4 md:min-w-full" />
+        <hr class="mt-2 mb-1 md:min-w-full" />
 
         {{-- Menu Staff --}}
-        <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+        <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
           Menu Staff
         </h6>
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
@@ -90,14 +90,33 @@
             </a>
           </li>
 
-          {{-- Notice Pajak --}}
+          {{-- === SECTION: NOTICE PAJAK === --}}
+          <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
+            Notice Pajak
+          </h6>
+
+          {{-- Kotak SKPD --}}
           <li class="items-center">
-            <a href="{{ route('staff.notice.index') }}"
-              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.notice.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
-              <i class="fas fa-file-invoice mr-2 text-sm {{ request()->routeIs('staff.notice.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
-              Notice Pajak
+            <a href="{{ route('staff.skpd.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.skpd.*') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-archive mr-2 text-sm {{ request()->routeIs('staff.skpd.*') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Inventaris SKPD
             </a>
           </li>
+
+          {{-- Laporan Harian --}}
+          <li class="items-center">
+            <a href="{{ route('staff.laporan-skpd.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.laporan-skpd.*') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-calendar-check mr-2 text-sm {{ request()->routeIs('staff.laporan-skpd.*') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Laporan Harian
+            </a>
+          </li>
+
+          {{-- === SECTION: LAINNYA === --}}
+          <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
+            Akun
+          </h6>
 
           {{-- Profil --}}
           <li class="items-center">
@@ -106,6 +125,18 @@
               <i class="fas fa-user mr-2 text-sm {{ request()->routeIs('profile.edit') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
               Profil
             </a>
+          </li>
+
+          {{-- Keluar --}}
+          <li class="items-center">
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit"
+                class="text-xs uppercase py-3 font-bold block w-full text-left text-blueGray-700 hover:text-red-500">
+                <i class="fas fa-sign-out-alt mr-2 text-sm text-blueGray-300"></i>
+                Keluar
+              </button>
+            </form>
           </li>
 
         </ul>

@@ -20,14 +20,7 @@
 @section('staff-content')
 <div class="px-6 -mt-32">
 
-  {{-- Flash Message --}}
-  @if (session('success'))
-    <div class="bg-emerald-100 border border-emerald-400 text-emerald-700 px-4 py-2 rounded mb-4 text-sm">
-      {{ session('success') }}
-    </div>
-  @endif
-
-  {{-- Tabel --}}
+  {{-- Card Table --}}
   <div x-data="liveKerusakan()" x-init="fetchTable()" class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
     <div class="rounded-t mb-0 px-4 py-3 border-0 bg-blueGray-50">
       <div class="flex flex-wrap items-center justify-between">
@@ -67,28 +60,42 @@
 @endsection
 
 @section('scripts')
-<script>
-  function liveKerusakan() {
-    return {
-      status: '{{ request('status') }}',
-      fetchTable() {
-        const url = new URL("{{ route('staff.kerusakan.index') }}");
-        if (this.status) {
-          url.searchParams.set('status', this.status);
-        }
-
-        fetch(url, {
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+  <script>
+    function liveKerusakan() {
+      return {
+        status: '{{ request('status') }}',
+        fetchTable() {
+          const url = new URL("{{ route('staff.kerusakan.index') }}");
+          if (this.status) {
+            url.searchParams.set('status', this.status);
           }
-        })
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById('kerusakan-table').innerHTML = html;
-        });
+
+          fetch(url, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('kerusakan-table').innerHTML = html;
+          });
+        }
       }
     }
-  }
-</script>
+  </script>
+
+  {{-- SweetAlert --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    @if (session('success'))
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        timer: 3000,
+        showConfirmButton: false
+      });
+    @endif
+  </script>
 @endsection
 
