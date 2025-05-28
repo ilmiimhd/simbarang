@@ -1,7 +1,8 @@
 <table class="items-center w-full bg-transparent border-collapse">
-  <thead class="sticky top-0 bg-blueGray-100 z-10">
+  <thead class="sticky top-0 bg-blueGray-100 z-0">
     <tr>
       <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b text-left">Barang</th>
+      <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b text-left">Kode Barang</th>
       <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b text-left">Kondisi</th>
       <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b text-left">Deskripsi</th>
       <th class="px-6 py-3 text-xs font-semibold text-blueGray-500 bg-blueGray-100 uppercase border-b text-left">Biaya</th>
@@ -13,6 +14,7 @@
     @forelse ($kerusakan as $item)
     <tr class="hover:bg-blueGray-50">
       <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->barang->nama_barang ?? '-' }}</td>
+      <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->kode_barang ?? '-' }}</td>
       <td class="px-6 py-4 text-sm border-t capitalize">
         <span class="px-2 py-1 rounded-full text-white text-xs font-bold
           {{ $item->kondisi === 'baik' ? 'bg-green-500' : ($item->kondisi === 'perbaikan' ? 'bg-yellow-500' : 'bg-red-500') }}">

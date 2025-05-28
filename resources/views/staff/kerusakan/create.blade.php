@@ -41,16 +41,23 @@
       <form method="POST" action="{{ route('staff.kerusakan.store') }}" enctype="multipart/form-data">
         @csrf
 
-        {{-- Barang --}}
+        {{-- Pilih Barang --}}
         <div class="mb-4">
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Pilih Barang Tetap</label>
           <select id="barangSelect" name="barang_id" required
             class="block w-full text-sm border border-blueGray-600 rounded">
             <option value="">-- Pilih Barang --</option>
             @foreach ($barangs as $barang)
-              <option value="{{ $barang->id }}">{{ $barang->nama_barang }}</option>
+              <option value="{{ $barang->id }}" data-kode="{{ $barang->kode_barang }}">{{ $barang->nama_barang }}</option>
             @endforeach
           </select>
+        </div>
+
+        {{-- Kode Barang (auto terisi) --}}
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Barang</label>
+          <input type="text" id="kodeBarangInput" name="kode_barang" readonly
+            class="block w-full text-sm border bg-blueGray-100 text-blueGray-600 rounded px-4 py-2">
         </div>
 
         {{-- Deskripsi --}}
@@ -60,20 +67,13 @@
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">{{ old('deskripsi') }}</textarea>
         </div>
 
-        {{-- Foto --}}
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Foto Kerusakan (opsional)</label>
-          <input type="file" name="foto_rusak"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
-        </div>
-
         {{-- Tombol --}}
         <div class="flex justify-end gap-2">
           <a href="{{ route('staff.kerusakan.index') }}"
             class="bg-blueGray-100 hover:bg-blueGray-200 text-blueGray-600 text-xs font-semibold px-4 py-2 rounded shadow transition">
             Batal
           </a>
-          <button type="submit"
+          <button type="button" id="btnConfirmSubmit"
             class="bg-lightBlue-500 hover:bg-lightBlue-600 text-white font-bold text-xs px-6 py-2 rounded shadow transition">
             Simpan
           </button>
@@ -85,18 +85,27 @@
 @endsection
 
 @section('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-  <script>
-    new TomSelect('#barangSelect', {
-      create: false,
-      sortField: {
-        field: "text",
-        direction: "asc"
-      }
-    });
-  </script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script>
+  new TomSelect('#barangSelect', {
+    create: false,
+    sortField: {
+      field: "text",
+      direction: "asc"
+    }
+  });
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  // Auto-fill kode barang
+  const barangSelect = document.getElementById('barangSelect');
+  const kodeBarangInput = document.getElementById('kodeBarangInput');
+  barangSelect.addEventListener('change', function () {
+    const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+    const kode = selectedOption.getAttribute('data-kode') || '';
+    kodeBarangInput.value = kode;
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
   @if (session('success'))
     Swal.fire({
@@ -107,6 +116,23 @@
       showConfirmButton: false
     });
   @endif
+
+  // Konfirmasi sebelum submit
+  document.getElementById('btnConfirmSubmit').addEventListener('click', function () {
+    Swal.fire({
+      title: 'Simpan Data?',
+      text: 'Pastikan semua data kerusakan sudah benar.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yakin, Simpan',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.closest('form').submit();
+      }
+    });
+  });
 </script>
 @endsection
-

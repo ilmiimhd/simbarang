@@ -14,7 +14,7 @@ class Skpd extends Model
     protected $fillable = [
         'kode_kotak',
         'jenis_skpd',
-        'jumlah_set_awal',
+        'jumlah_awal',
         'jumlah_sisa',
         'tanggal_masuk',
     ];

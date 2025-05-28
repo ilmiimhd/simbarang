@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\RequestAkun;
 
 class RequestAkunController extends Controller
 {
@@ -18,20 +18,23 @@ class RequestAkunController extends Controller
     {
         $request->validate([
             'nama'     => 'required|string|max:255',
-            'nip'      => 'required|string|max:50|unique:requests,nip',
+            'nip'      => 'required|numeric|digits:18|unique:requests,nip',
             'jabatan'  => 'required|string|max:100',
             'instansi' => 'required|string',
             'email'    => 'required|email|unique:requests,email',
+        ], [
+            'nip.digits' => 'NIP harus terdiri dari 18 digit angka.',
+            'nip.unique' => 'NIP ini sudah pernah digunakan.',
+            'email.unique' => 'Email ini sudah terdaftar.',
         ]);
 
-        DB::table('requests')->insert([
-            'nama'       => $request->nama,
-            'nip'        => $request->nip,
-            'jabatan'    => $request->jabatan,
-            'instansi'   => $request->instansi,
-            'email'      => $request->email,
-            'status'     => 'pending',
-            'created_at' => now(),
+        RequestAkun::create([
+            'nama'     => $request->nama,
+            'nip'      => $request->nip,
+            'jabatan'  => $request->jabatan,
+            'instansi' => $request->instansi,
+            'email'    => $request->email,
+            'status'   => 'pending',
         ]);
 
         return redirect()->route('request-akun.form')->with('success', 'Mohon tunggu verifikasi dari admin.');

@@ -65,7 +65,7 @@
 
 {{-- Konten --}}
 @section('staff-content')
-<div class="px-6 relative z-10 transform translate-y-[3.2rem] pb-28">
+<div class="px-6 relative z-0 transform translate-y-[3.2rem] pb-28">
 
   {{-- Table Card --}}
   <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -80,12 +80,13 @@
     {{-- Table --}}
     <div class="block w-full overflow-x-auto max-h-[500px] overflow-y-auto">
       <table class="items-center w-full bg-transparent border-collapse">
-        <thead class="sticky top-0 bg-blueGray-100 z-10 text-xs uppercase text-blueGray-500">
+        <thead class="sticky top-0 bg-blueGray-100 z-0 text-xs uppercase text-blueGray-500">
           <tr>
             <th class="px-6 py-3 text-left">Tanggal</th>
             <th class="px-6 py-3 text-left">Kode Kotak</th>
             <th class="px-6 py-3 text-left">Lokasi</th>
             <th class="px-6 py-3 text-left">Pemakaian</th>
+            <th class="px-6 py-3 text-left">Rusak</th>
             <th class="px-6 py-3 text-left">Sisa Harian</th>
           </tr>
         </thead>
@@ -96,6 +97,7 @@
             <td class="px-6 py-3">{{ $laporan->skpd->kode_kotak }}</td>
             <td class="px-6 py-3 capitalize">{{ str_replace('_', ' ', $laporan->lokasi_penggunaan) }}</td>
             <td class="px-6 py-3">{{ number_format($laporan->penggunaan_lembar) }} lembar</td>
+            <td class="px-6 py-3">{{ number_format($laporan->jumlah_rusak) }} lembar</td>
             <td class="px-6 py-3">{{ $laporan->jumlah_sisa_harian }} lembar</td>
           </tr>
           @empty

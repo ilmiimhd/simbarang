@@ -1,9 +1,9 @@
 @extends('layouts.request')
 
 @section('auth-content')
-<div class="container mx-auto px-4 h-full">
+<div class="container mx-auto px-4 h-full mt-20">
   <div class="flex content-center items-center justify-center h-full">
-    <div class="w-full lg:w-5/12 px-4">
+    <div class="w-full lg:w-9/12 xl:w-8/12 px-4">
       <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0">
         <div class="rounded-t mb-0 px-6 py-2">
           <div class="text-center mb-1 pt-4">
@@ -42,7 +42,7 @@
             <small>Silakan isi data di bawah ini untuk mengajukan akun SIMBARANG</small>
           </div>
 
-          <form method="POST" action="{{ route('request-akun.submit') }}">
+          <form id="requestForm" method="POST" action="{{ route('request-akun.submit') }}">
             @csrf
 
             {{-- Nama --}}
@@ -56,7 +56,7 @@
             {{-- NIP --}}
             <div class="mb-3">
               <label class="block uppercase text-blueGray-600 text-xs font-bold mb-2">NIP</label>
-              <input type="text" name="nip" required
+              <input type="text" name="nip" required maxlength="18" pattern="\d{18}" title="Harus 18 digit angka"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full transition-all duration-150"
                 placeholder="Masukkan NIP">
             </div>
@@ -107,6 +107,30 @@
 
 <script>
   function confirmSubmit() {
+    const form = document.getElementById('requestForm');
+    const inputs = form.querySelectorAll('input, select');
+    let valid = true;
+
+    inputs.forEach(input => {
+      if (!input.value.trim()) {
+        valid = false;
+        input.classList.add('ring', 'ring-red-500'); // efek highlight error
+      } else {
+        input.classList.remove('ring', 'ring-red-500');
+      }
+    });
+
+    if (!valid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Data Belum Lengkap',
+        text: 'Tolong isi semua field sebelum mengirim.',
+        confirmButtonColor: '#ef4444'
+      });
+      return;
+    }
+
+    // Kalau semua sudah valid → munculkan konfirmasi
     Swal.fire({
       title: 'Kirim Permintaan?',
       text: "Pastikan semua data sudah benar ya!",
@@ -118,7 +142,7 @@
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        document.querySelector('form').submit();
+        form.submit();
       }
     });
   }

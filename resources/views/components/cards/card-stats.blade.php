@@ -4,7 +4,7 @@
   'statArrow' => 'up',
   'statPercent' => ' ',
   'statPercentColor' => 'text-emerald-500',
-  'statDescripiron' => 'Since last month',
+  'statDescription' => 'Since last month',
   'statIconName' => 'far fa-chart-bar',
   'statIconColor' => 'bg-red-500',
 ])
@@ -16,7 +16,7 @@
         <h5 class="text-blueGray-400 uppercase font-bold text-xs">
           {{ $statSubtitle }}
         </h5>
-        <span class="font-semibold text-xl text-blueGray-700">
+        <span class="font-semibold text-xl text-blueGray-700 whitespace-nowrap overflow-hidden text-ellipsis">
           {{ $statTitle }}
         </span>
       </div>
@@ -32,7 +32,7 @@
         {{ $statPercent }}
       </span>
       <span class="whitespace-nowrap">
-        {{ $statDescripiron }}
+        {{ $statDescription }}
       </span>
     </p>
   </div>

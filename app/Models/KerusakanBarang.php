@@ -13,10 +13,10 @@ class KerusakanBarang extends Model
 
     protected $fillable = [
         'barang_id',
+        'kode_barang',
         'jenis_barang',
         'kondisi',
         'deskripsi',
-        'foto_rusak',
         'biaya_perbaikan',
         'catatan_perbaikan',
     ];

@@ -65,7 +65,7 @@
 
 {{-- Konten --}}
 @section('staff-content')
-<div class="px-6 relative z-10 transform translate-y-[3.2rem] pb-28">
+<div class="px-6 relative z-0 transform translate-y-[3.2rem] pb-28">
 
   {{-- Ringkasan Total --}}
   <div class="grid md:grid-cols-3 gap-6 mb-6">
@@ -88,7 +88,7 @@
     <h3 class="font-semibold text-blueGray-700 text-base mb-4">Barang yang Dibeli</h3>
     <div class="bg-white rounded shadow overflow-x-auto max-h-[500px] overflow-y-auto">
       <table class="w-full table-auto border-collapse">
-        <thead class="sticky top-0 bg-blueGray-100 z-10">
+        <thead class="sticky top-0 bg-blueGray-100 z-0">
           <tr class="bg-blueGray-100 text-blueGray-600 text-xs uppercase">
             <th class="px-6 py-3 text-left">Nama</th>
             <th class="px-6 py-3 text-left">Jenis</th>
@@ -123,7 +123,7 @@
     <h3 class="font-semibold text-blueGray-700 text-base mb-4">Barang yang Diperbaiki</h3>
     <div class="bg-white rounded shadow overflow-x-auto max-h-[500px] overflow-y-auto">
       <table class="w-full table-auto border-collapse">
-        <thead class="sticky top-0 bg-blueGray-100 z-10">
+        <thead class="sticky top-0 bg-blueGray-100 z-0">
           <tr class="bg-blueGray-100 text-blueGray-600 text-xs uppercase">
             <th class="px-6 py-3 text-left">Barang</th>
             <th class="px-6 py-3 text-left">Deskripsi</th>

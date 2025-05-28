@@ -64,7 +64,7 @@
     {{-- Table Scrollable --}}
     <div class="block w-full overflow-x-auto max-h-[500px] overflow-y-auto">
       <table class="items-center w-full bg-transparent border-collapse">
-        <thead class="sticky top-0 bg-blueGray-100 z-10">
+        <thead class="sticky top-0 bg-blueGray-100 z-0">
           <tr class="text-blueGray-600 text-xs uppercase">
             <th class="px-6 py-3 text-left">Kode Kotak</th>
             <th class="px-6 py-3 text-left">Jenis</th>
@@ -78,7 +78,7 @@
             <tr class="hover:bg-blueGray-50">
               <td class="px-6 py-4 text-sm text-blueGray-700 border-t border-blueGray-100">{{ $skpd->kode_kotak }}</td>
               <td class="px-6 py-4 text-sm capitalize border-t border-blueGray-100">{{ str_replace('_', ' ', $skpd->jenis_skpd) }}</td>
-              <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $skpd->jumlah_set_awal }}</td>
+              <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $skpd->jumlah_awal }}</td>
               <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $skpd->jumlah_sisa }}</td>
               <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ \Carbon\Carbon::parse($skpd->tanggal_masuk)->format('d M Y') }}</td>
               

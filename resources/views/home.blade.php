@@ -17,12 +17,16 @@
           </p>
           <div class="mt-12">
             <a
+              role="button"
+              aria-label="Permintaan Akun SIMBARANG"
               href="{{ route('request-akun.form') }}"
               class="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
             >
               Permintaan Akun
             </a>
             <a
+              role="button"
+              aria-label="Masuk ke Sistem SIMBARANG"
               href="{{ route('login') }}"
               class="ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-700 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
             >
@@ -34,7 +38,7 @@
     </div>
 
     <img
-      class="absolute top-0 b-auto right-0 pt-16 sm:w-6/12 -mt-48 sm:mt-0 w-10/12 max-h-860px"
+      class="hidden md:block absolute top-0 right-0 pt-16 w-6/12 max-h-860px object-contain"
       src="{{ asset('img/pattern_react.png') }}"
       alt="Hero Image"
     />
@@ -118,7 +122,7 @@
       <div class="flex flex-wrap items-center md:justify-between justify-center">
         <div class="w-full md:w-6/12 px-4 mx-auto text-center">
           <div class="text-sm text-blueGray-500 font-semibold py-1">
-            &copy; {{ date('Y') }} SIMBARANG SAMSAT KAPUAS
+            &copy; {{ date('Y') }} <span class="font-semibold uppercase">SIMBARANG</span> – SAMSAT Kapuas
           </div>
         </div>
       </div>

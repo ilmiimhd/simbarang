@@ -38,7 +38,7 @@
     </div>
 
     <div class="px-6 py-6">
-      <form method="POST" action="{{ route('staff.kerusakan.update', $kerusakan->id) }}">
+      <form id="formKerusakanEdit" method="POST" action="{{ route('staff.kerusakan.update', $kerusakan->id) }}">
         @csrf
         @method('PUT')
 
@@ -48,10 +48,17 @@
           <input type="text" value="{{ $kerusakan->barang->nama_barang }}" class="w-full border px-4 py-2 rounded text-sm bg-blueGray-100 text-blueGray-600" readonly>
         </div>
 
+        {{-- Kode Barang --}}
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Barang</label>
+          <input type="text" readonly value="{{ $kerusakan->kode_barang }}"
+            class="block w-full text-sm border bg-blueGray-100 text-blueGray-600 rounded px-4 py-2">
+        </div>
+
         {{-- Kondisi --}}
         <div class="mb-4">
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Kondisi</label>
-          <select name="kondisi" required
+          <select name="kondisi" id="kondisiSelect" required
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
             <option value="rusak" {{ $kerusakan->kondisi === 'rusak' ? 'selected' : '' }}>Rusak</option>
             <option value="perbaikan" {{ $kerusakan->kondisi === 'perbaikan' ? 'selected' : '' }}>Perbaikan</option>
@@ -76,7 +83,7 @@
         {{-- Catatan Perbaikan --}}
         <div class="mb-6">
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Catatan Perbaikan</label>
-          <textarea name="catatan_perbaikan" rows="3"
+          <textarea name="catatan_perbaikan" id="catatanPerbaikan" rows="3"
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">{{ old('catatan_perbaikan', $kerusakan->catatan_perbaikan) }}</textarea>
         </div>
 
@@ -97,10 +104,52 @@
   </div>
 </div>
 @endsection
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-  @if (session('success'))
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('formKerusakanEdit');
+    const kondisiSelect = document.getElementById('kondisiSelect');
+    const catatanPerbaikan = document.getElementById('catatanPerbaikan');
+
+    // ⛔️ Stop auto-submit dan ganti dengan konfirmasi SweetAlert
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      Swal.fire({
+        title: 'Simpan Perubahan?',
+        text: 'Pastikan data yang diubah sudah benar.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#aaa',
+        confirmButtonText: 'Yakin, Simpan',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+
+    // ✅ Toggle required untuk catatan perbaikan
+    function toggleRequiredField() {
+      const isBaik = kondisiSelect.value === 'baik';
+      catatanPerbaikan.required = isBaik;
+      catatanPerbaikan.parentElement.querySelector('label').innerHTML =
+        `Catatan Perbaikan ${isBaik ? '<span class="text-red-500">*</span>' : ''}`;
+    }
+
+    toggleRequiredField();
+    kondisiSelect.addEventListener('change', toggleRequiredField);
+  });
+</script>
+
+@if (session('success'))
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
     Swal.fire({
       icon: 'success',
       title: 'Berhasil!',
@@ -108,6 +157,7 @@
       timer: 3000,
       showConfirmButton: false
     });
-  @endif
+  });
 </script>
+@endif
 @endsection

@@ -49,20 +49,17 @@ class KerusakanController extends Controller
         $request->validate([
             'barang_id' => 'required|exists:barang,id',
             'deskripsi' => 'required|string',
-            'foto_rusak' => 'nullable|image|max:2048',
         ]);
 
-        $path = null;
-        if ($request->hasFile('foto_rusak')) {
-            $path = $request->file('foto_rusak')->store('kerusakan', 'public');
-        }
+        // Ambil data barang
+        $barang = \App\Models\Barang::findOrFail($request->barang_id);
 
         \App\Models\KerusakanBarang::create([
-            'barang_id' => $request->barang_id,
-            'jenis_barang' => 'tetap', // default karena hanya barang tetap
-            'kondisi' => 'rusak',
-            'deskripsi' => $request->deskripsi,
-            'foto_rusak' => $path,
+            'barang_id'     => $request->barang_id,
+            'kode_barang'   => $barang->kode_barang,
+            'jenis_barang'  => 'tetap',
+            'kondisi'       => 'rusak',
+            'deskripsi'     => $request->deskripsi,
         ]);
 
         return redirect()->route('staff.kerusakan.index')->with('success', 'Data kerusakan berhasil ditambahkan!');
@@ -80,7 +77,7 @@ class KerusakanController extends Controller
             'kondisi' => 'required|in:baik,rusak,perbaikan',
             'deskripsi' => 'required|string',
             'biaya_perbaikan' => 'nullable|integer|min:0',
-            'catatan_perbaikan' => 'nullable|string|max:255',
+            'catatan_perbaikan' => $request->kondisi === 'baik' ? 'required|string|max:255' : 'nullable|string|max:255',
         ]);
 
         $kerusakan = \App\Models\KerusakanBarang::findOrFail($id);

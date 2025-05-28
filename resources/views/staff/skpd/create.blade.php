@@ -59,10 +59,10 @@
           </select>
         </div>
 
-        {{-- Jumlah Set Awal --}}
+        {{-- Jumlah Awal --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Jumlah Set Awal</label>
-          <input type="number" name="jumlah_set_awal" value="{{ old('jumlah_set_awal') }}" min="1" required
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Jumlah Awal (Lembar) </label>
+          <input type="number" name="jumlah_awal" value="{{ old('jumlah_awal') }}" min="1" required
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
         </div>
 
@@ -90,3 +90,16 @@
 </div>
 @endsection
 
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  @if ($errors->any())
+    Swal.fire({
+      icon: 'error',
+      title: 'Gagal Simpan!',
+      html: '{!! implode("<br>", $errors->all()) !!}',
+      confirmButtonColor: '#e3342f'
+    });
+  @endif
+</script>
+@endsection

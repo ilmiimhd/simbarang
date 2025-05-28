@@ -27,15 +27,25 @@ class SkpdController extends Controller
         $request->validate([
             'kode_kotak' => 'required|unique:skpds,kode_kotak',
             'jenis_skpd' => 'required|in:kendaraan,alat_berat',
-            'jumlah_set_awal' => 'required|integer|min:1',
+            'jumlah_awal' => 'required|integer|min:1',
             'tanggal_masuk' => 'required|date',
+        ], [
+            'kode_kotak.required' => 'Kode kotak wajib diisi.',
+            'kode_kotak.unique' => 'Kode kotak ini sudah digunakan.',
+            'jenis_skpd.required' => 'Jenis SKPD wajib dipilih.',
+            'jenis_skpd.in' => 'Jenis SKPD tidak valid.',
+            'jumlah_awal.required' => 'Jumlah awal wajib diisi.',
+            'jumlah_awal.integer' => 'Jumlah awal harus berupa angka.',
+            'jumlah_awal.min' => 'Jumlah awal minimal 1 lembar.',
+            'tanggal_masuk.required' => 'Tanggal masuk wajib diisi.',
+            'tanggal_masuk.date' => 'Format tanggal masuk tidak valid.',
         ]);
 
         Skpd::create([
             'kode_kotak' => $request->kode_kotak,
             'jenis_skpd' => $request->jenis_skpd,
-            'jumlah_set_awal' => $request->jumlah_set_awal,
-            'jumlah_sisa' => $request->jumlah_set_awal, // default: sama dengan awal
+            'jumlah_awal' => $request->jumlah_awal,
+            'jumlah_sisa' => $request->jumlah_awal, // default: sama dengan awal
             'tanggal_masuk' => $request->tanggal_masuk,
         ]);
 

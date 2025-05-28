@@ -17,13 +17,13 @@
     @include('components.navbars.request')
 
     <main>
-      <section class="relative w-full h-full py-40 min-h-screen">
+      <section class="relative w-full h-full min-h-screen ">
         <div
           class="absolute top-0 w-full h-full bg-blueGray-800 bg-no-repeat bg-cover z-0"
-          style="background-image: url('{{ asset('img/register_bg_2.png') }}');"
-        ></div>
+            style="background-image: url('{{ asset('img/register_bg_2.png') }}'); background-size: cover; background-position: top center;">
+        </div>
 
-        <div class="relative z-10 pt-10">
+        <div class="relative z-10 pt-10 pb-20">
           @yield('auth-content')
         </div>
 

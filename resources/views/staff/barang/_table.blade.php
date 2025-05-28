@@ -1,5 +1,5 @@
 <table class="items-center w-full bg-transparent border-collapse">
-  <thead class="sticky top-0 bg-blueGray-100 z-10">
+  <thead class="sticky top-0 bg-blueGray-100 z-0">
     <tr class="text-blueGray-600 text-xs uppercase">
       <th class="px-6 py-3 text-left">Nama</th>
       <th class="px-6 py-3 text-left">Jenis</th>
