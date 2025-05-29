@@ -83,19 +83,14 @@
   </div>
 </div>
 @endsection
-
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <script>
   new TomSelect('#barangSelect', {
     create: false,
-    sortField: {
-      field: "text",
-      direction: "asc"
-    }
+    sortField: { field: "text", direction: "asc" }
   });
 
-  // Auto-fill kode barang
   const barangSelect = document.getElementById('barangSelect');
   const kodeBarangInput = document.getElementById('kodeBarangInput');
   barangSelect.addEventListener('change', function () {
@@ -106,6 +101,7 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   @if (session('success'))
     Swal.fire({
@@ -116,9 +112,16 @@
       showConfirmButton: false
     });
   @endif
-
-  // Konfirmasi sebelum submit
+  
   document.getElementById('btnConfirmSubmit').addEventListener('click', function () {
+    const form = this.closest('form');
+
+    // Cek validasi form HTML5 terlebih dahulu
+    if (!form.checkValidity()) {
+      form.reportValidity(); // Tampilkan pesan error browser (untuk required)
+      return; // Stop di sini
+    }
+
     Swal.fire({
       title: 'Simpan Data?',
       text: 'Pastikan semua data kerusakan sudah benar.',
@@ -130,7 +133,7 @@
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.closest('form').submit();
+        form.submit(); // Submit hanya jika disetujui
       }
     });
   });

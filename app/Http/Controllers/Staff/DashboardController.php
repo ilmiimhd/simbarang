@@ -18,8 +18,9 @@ class DashboardController extends Controller
         $totalBarangRusak = KerusakanBarang::where('kondisi', 'rusak')->count();
 
         $totalPembelian = Barang::whereNotNull('harga_satuan')
-            ->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
+            ->whereNotNull('tanggal_masuk')
+            ->whereMonth('tanggal_masuk', now()->month)
+            ->whereYear('tanggal_masuk', now()->year)
             ->sum(DB::raw('jumlah * harga_satuan'));
 
         $totalPerbaikan = KerusakanBarang::where('kondisi', 'baik')

@@ -18,15 +18,15 @@ class PengadaanController extends Controller
         $bulan = $request->bulan ?? date('m');
         $tahun = $request->tahun ?? date('Y');
 
-        // Pembelian dari barang habis pakai
+        // ✅ Pembelian pakai tanggal_masuk
         $pembelian = Barang::whereNotNull('harga_satuan')
-            ->whereMonth('created_at', $bulan)
-            ->whereYear('created_at', $tahun)
+            ->whereMonth('tanggal_masuk', $bulan)
+            ->whereYear('tanggal_masuk', $tahun)
             ->get();
 
         $totalPembelian = $pembelian->sum(fn($b) => $b->jumlah * $b->harga_satuan);
 
-        // Biaya perbaikan
+        // Perbaikan tetap pakai updated_at
         $perbaikan = KerusakanBarang::where('kondisi', 'baik')
             ->whereNotNull('biaya_perbaikan')
             ->whereMonth('updated_at', $bulan)
@@ -47,20 +47,19 @@ class PengadaanController extends Controller
         $bulan = $request->bulan;
         $tahun = $request->tahun;
 
-        // 👉 Konversi angka bulan ke nama bulan Bahasa Indonesia
         Carbon::setLocale('id');
         $namaBulan = Carbon::createFromDate(null, $bulan, null)->translatedFormat('F');
 
-        // Ambil data pembelian
-        $pembelian = \App\Models\Barang::whereNotNull('harga_satuan')
-            ->whereMonth('created_at', $bulan)
-            ->whereYear('created_at', $tahun)
+        // ✅ Pembelian pakai tanggal_masuk
+        $pembelian = Barang::whereNotNull('harga_satuan')
+            ->whereMonth('tanggal_masuk', $bulan)
+            ->whereYear('tanggal_masuk', $tahun)
             ->get();
 
         $totalPembelian = $pembelian->sum(fn($item) => $item->jumlah * $item->harga_satuan);
 
-        // Ambil data perbaikan
-        $perbaikan = \App\Models\KerusakanBarang::where('kondisi', 'baik')
+        // Perbaikan pakai updated_at
+        $perbaikan = KerusakanBarang::where('kondisi', 'baik')
             ->whereMonth('updated_at', $bulan)
             ->whereYear('updated_at', $tahun)
             ->get();

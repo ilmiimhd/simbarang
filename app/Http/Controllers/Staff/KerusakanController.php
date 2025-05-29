@@ -32,7 +32,7 @@ class KerusakanController extends Controller
     public function create()
     {
         // Ambil semua barang_id yang kondisi terakhirnya masih rusak atau perbaikan
-        $usedIds = \App\Models\KerusakanBarang::whereIn('kondisi', ['rusak', 'perbaikan'])
+        $usedIds = \App\Models\KerusakanBarang::whereIn('kondisi', ['rusak', 'perbaikan', 'rusak_berat'])
             ->pluck('barang_id')
             ->toArray();
 
@@ -74,10 +74,12 @@ class KerusakanController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kondisi' => 'required|in:baik,rusak,perbaikan',
+            'kondisi' => 'required|in:baik,rusak,perbaikan,rusak_berat',
             'deskripsi' => 'required|string',
-            'biaya_perbaikan' => 'nullable|integer|min:0',
-            'catatan_perbaikan' => $request->kondisi === 'baik' ? 'required|string|max:255' : 'nullable|string|max:255',
+            'biaya_perbaikan' => $request->kondisi === 'baik' ? 'nullable|integer|min:0' : 'nullable',
+            'catatan_perbaikan' => in_array($request->kondisi, ['baik', 'rusak_berat']) 
+                ? 'required|string|max:255' 
+                : 'nullable|string|max:255',
         ]);
 
         $kerusakan = \App\Models\KerusakanBarang::findOrFail($id);
@@ -86,7 +88,9 @@ class KerusakanController extends Controller
             'kondisi' => $request->kondisi,
             'deskripsi' => $request->deskripsi,
             'biaya_perbaikan' => $request->kondisi === 'baik' ? $request->biaya_perbaikan : null,
-            'catatan_perbaikan' => $request->kondisi === 'baik' ? $request->catatan_perbaikan : null,
+            'catatan_perbaikan' => in_array($request->kondisi, ['baik', 'rusak_berat']) 
+                ? $request->catatan_perbaikan 
+                : null,
         ]);
 
         return redirect()->route('staff.kerusakan.index')->with('success', 'Data kerusakan berhasil diperbarui!');

@@ -102,7 +102,7 @@
           </tr>
           @empty
           <tr>
-            <td colspan="5" class="text-center text-blueGray-400 py-4">Belum ada laporan harian.</td>
+            <td colspan="6" class="text-center text-blueGray-400 py-4">Belum ada laporan harian.</td>
           </tr>
           @endforelse
         </tbody>

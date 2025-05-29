@@ -63,6 +63,7 @@
             <option value="rusak" {{ $kerusakan->kondisi === 'rusak' ? 'selected' : '' }}>Rusak</option>
             <option value="perbaikan" {{ $kerusakan->kondisi === 'perbaikan' ? 'selected' : '' }}>Perbaikan</option>
             <option value="baik" {{ $kerusakan->kondisi === 'baik' ? 'selected' : '' }}>Baik</option>
+            <option value="rusak_berat" {{ $kerusakan->kondisi === 'rusak_berat' ? 'selected' : '' }}>Rusak Berat</option>
           </select>
         </div>
 
@@ -136,12 +137,11 @@
 
     // ✅ Toggle required untuk catatan perbaikan
     function toggleRequiredField() {
-      const isBaik = kondisiSelect.value === 'baik';
-      catatanPerbaikan.required = isBaik;
+      const isWajibCatatan = ['baik', 'rusak_berat'].includes(kondisiSelect.value);
+      catatanPerbaikan.required = isWajibCatatan;
       catatanPerbaikan.parentElement.querySelector('label').innerHTML =
-        `Catatan Perbaikan ${isBaik ? '<span class="text-red-500">*</span>' : ''}`;
+        `Catatan Perbaikan ${isWajibCatatan ? '<span class="text-red-500">*</span>' : ''}`;
     }
-
     toggleRequiredField();
     kondisiSelect.addEventListener('change', toggleRequiredField);
   });

@@ -37,7 +37,8 @@
               <option value="">Semua</option>
               <option value="rusak">Rusak</option>
               <option value="perbaikan">Perbaikan</option>
-              <option value="baik">Riwayat</option>
+              <option value="baik">Baik</option>
+              <option value="rusak_berat">Rusak Berat</option>
             </select>
           </div>
 

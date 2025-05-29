@@ -55,17 +55,33 @@ class BarangController extends Controller
             'jumlah' => 'required|integer|min:1',
             'satuan' => 'required|string',
         ];
-
-        // Tambahan validasi dinamis
+        
         if ($request->jenis_barang === 'habis_pakai') {
             $rules['harga_satuan'] = 'required|integer|min:0';
+            $rules['tanggal_masuk'] = 'required|date';
         } elseif ($request->jenis_barang === 'tetap') {
             $rules['kode_barang'] = 'required|string|max:100';
+            $rules['tahun_masuk'] = 'required|digits:4';
+            $rules['tanggal_masuk'] = 'nullable|date';
+            $rules['harga_satuan'] = 'nullable|integer|min:0';
         }
 
         $request->validate($rules);
 
-        Barang::create($request->all());
+        $data = $request->all();
+        $data['harga_satuan'] = $request->filled('harga_satuan') ? $request->harga_satuan : null;
+        $data['tanggal_masuk'] = $request->filled('tanggal_masuk') ? $request->tanggal_masuk : null;
+
+        if ($request->jenis_barang === 'habis_pakai') {
+            $data['tahun_masuk'] = null;
+            $data['kode_barang'] = null;
+        } elseif ($request->jenis_barang === 'tetap') {
+            $data['tahun_masuk'] = $request->tahun_masuk;
+            $data['kode_barang'] = $request->kode_barang;
+            // harga_satuan biarin aja otomatis
+        }
+
+        Barang::create($data);
 
         return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil ditambahkan!');
     }
@@ -86,17 +102,35 @@ class BarangController extends Controller
             'satuan' => 'required|string',
         ];
 
-        // Tambahan validasi berdasarkan jenis_barang
         if ($request->jenis_barang === 'habis_pakai') {
             $rules['harga_satuan'] = 'required|integer|min:0';
+            $rules['tanggal_masuk'] = 'required|date';
         } elseif ($request->jenis_barang === 'tetap') {
             $rules['kode_barang'] = 'required|string|max:100';
+            $rules['tahun_masuk'] = 'required|digits:4';
+            $rules['tanggal_masuk'] = 'nullable|date';
+            $rules['harga_satuan'] = 'nullable|integer|min:0';
         }
 
         $request->validate($rules);
 
+        $data = $request->all();
+        $data['harga_satuan'] = $request->filled('harga_satuan') ? $request->harga_satuan : null;
+        $data['tanggal_masuk'] = $request->filled('tanggal_masuk') ? $request->tanggal_masuk : null;
+
+        if ($request->jenis_barang === 'habis_pakai') {
+            $data['tahun_masuk'] = null;
+            $data['kode_barang'] = null;
+            $data['tanggal_masuk'] = $request->tanggal_masuk;
+        } elseif ($request->jenis_barang === 'tetap') {
+            $data['tanggal_masuk'] = $request->tanggal_masuk;
+            $data['tahun_masuk'] = $request->tahun_masuk;
+            $data['kode_barang'] = $request->kode_barang;
+            // harga_satuan biarin aja otomatis
+        }
+
         $barang = Barang::findOrFail($id);
-        $barang->update($request->all());
+        $barang->update($data);
 
         return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil diupdate!');
     }

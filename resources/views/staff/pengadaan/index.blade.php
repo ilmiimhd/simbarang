@@ -90,6 +90,7 @@
       <table class="w-full table-auto border-collapse">
         <thead class="sticky top-0 bg-blueGray-100 z-0">
           <tr class="bg-blueGray-100 text-blueGray-600 text-xs uppercase">
+            <th class="px-6 py-3 text-left">Tanggal Masuk</th>
             <th class="px-6 py-3 text-left">Nama</th>
             <th class="px-6 py-3 text-left">Jenis</th>
             <th class="px-6 py-3 text-left">Jumlah</th>
@@ -100,6 +101,9 @@
         <tbody>
           @forelse ($pembelian as $barang)
             <tr class="hover:bg-blueGray-50">
+              <td class="px-6 py-4 text-sm">
+                {{ \Carbon\Carbon::parse($barang->tanggal_masuk)->format('d-m-Y') }}
+              </td>
               <td class="px-6 py-4 text-sm">{{ $barang->nama_barang }}</td>
               <td class="px-6 py-4 text-sm capitalize">{{ str_replace('_', ' ', $barang->jenis_barang) }}</td>
               <td class="px-6 py-4 text-sm">{{ $barang->jumlah }}</td>
@@ -110,7 +114,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="5" class="text-center text-blueGray-400 text-sm py-4">Tidak ada data pembelian.</td>
+              <td colspan="6" class="text-center text-blueGray-400 text-sm py-4">Tidak ada data pembelian.</td>
             </tr>
           @endforelse
         </tbody>

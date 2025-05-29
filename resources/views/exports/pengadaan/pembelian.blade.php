@@ -11,6 +11,7 @@
       <th><strong>Jumlah</strong></th>
       <th><strong>Harga Satuan</strong></th>
       <th><strong>Subtotal</strong></th>
+      <th><strong>Tanggal Masuk</strong></th>
     </tr>
   </thead>
   <tbody>
@@ -22,6 +23,7 @@
         <td>{{ $barang->jumlah }}</td>
         <td>Rp {{ number_format($barang->harga_satuan, 0, ',', '.') }}</td>
         <td>Rp {{ number_format($barang->jumlah * $barang->harga_satuan, 0, ',', '.') }}</td>
+        <td>{{ \Carbon\Carbon::parse($barang->tanggal_masuk)->format('d-m-Y') }}</td>
       </tr>
     @endforeach
   </tbody>
