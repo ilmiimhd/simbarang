@@ -9,7 +9,7 @@
         Edit Kerusakan
       </h2>
       <p class="mt-2 md:mt-3 text-sm md:text-base leading-relaxed text-white opacity-80">
-        Perbarui status atau informasi detail kerusakan barang tetap.
+        Perbarui status atau informasi detail kerusakan aset tetap.
       </p>
     </div>
   </div>
@@ -42,16 +42,17 @@
         @csrf
         @method('PUT')
 
-        {{-- Barang --}}
+        {{-- Aset --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Barang</label>
-          <input type="text" value="{{ $kerusakan->barang->nama_barang }}" class="w-full border px-4 py-2 rounded text-sm bg-blueGray-100 text-blueGray-600" readonly>
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Aset</label>
+          <input type="text" value="{{ $kerusakan->aset->nama_aset ?? '-' }}"
+            class="w-full border px-4 py-2 rounded text-sm bg-blueGray-100 text-blueGray-600" readonly>
         </div>
 
-        {{-- Kode Barang --}}
+        {{-- Kode Aset --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Barang</label>
-          <input type="text" readonly value="{{ $kerusakan->kode_barang }}"
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Aset</label>
+          <input type="text" readonly value="{{ $kerusakan->aset->kode_barang ?? '-' }}"
             class="block w-full text-sm border bg-blueGray-100 text-blueGray-600 rounded px-4 py-2">
         </div>
 
@@ -60,10 +61,10 @@
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Kondisi</label>
           <select name="kondisi" id="kondisiSelect" required
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
-            <option value="rusak" {{ $kerusakan->kondisi === 'rusak' ? 'selected' : '' }}>Rusak</option>
             <option value="perbaikan" {{ $kerusakan->kondisi === 'perbaikan' ? 'selected' : '' }}>Perbaikan</option>
+            <option value="rusak ringan" {{ $kerusakan->kondisi === 'rusak ringan' ? 'selected' : '' }}>Rusak Ringan</option>
+            <option value="rusak berat" {{ $kerusakan->kondisi === 'rusak berat' ? 'selected' : '' }}>Rusak Berat</option>
             <option value="baik" {{ $kerusakan->kondisi === 'baik' ? 'selected' : '' }}>Baik</option>
-            <option value="rusak_berat" {{ $kerusakan->kondisi === 'rusak_berat' ? 'selected' : '' }}>Rusak Berat</option>
           </select>
         </div>
 
@@ -115,7 +116,7 @@
     const kondisiSelect = document.getElementById('kondisiSelect');
     const catatanPerbaikan = document.getElementById('catatanPerbaikan');
 
-    // ⛔️ Stop auto-submit dan ganti dengan konfirmasi SweetAlert
+    // ⛔️ Konfirmasi SweetAlert sebelum submit
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -135,9 +136,9 @@
       });
     });
 
-    // ✅ Toggle required untuk catatan perbaikan
+    // ✅ Toggle required catatan perbaikan
     function toggleRequiredField() {
-      const isWajibCatatan = ['baik', 'rusak_berat'].includes(kondisiSelect.value);
+      const isWajibCatatan = ['baik', 'rusak berat'].includes(kondisiSelect.value);
       catatanPerbaikan.required = isWajibCatatan;
       catatanPerbaikan.parentElement.querySelector('label').innerHTML =
         `Catatan Perbaikan ${isWajibCatatan ? '<span class="text-red-500">*</span>' : ''}`;

@@ -12,22 +12,18 @@ class BarangController extends Controller
     {
         $query = Barang::query();
 
-        $subkategoris = Barang::select('subkategori')->distinct()->pluck('subkategori');
+        $kategoris = Barang::select('kategori')->distinct()->pluck('kategori');
 
-        if ($request->has('search') || $request->has('subkategori') || $request->has('jenis')) {
+        if ($request->has('search') || $request->has('kategori')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('nama_barang', 'like', $search . '%')
-                ->orWhere('nama_barang', 'like', '% ' . $search . '%')
-                ->orWhere('nama_barang', 'like', '%' . $search . '%');
+                  ->orWhere('nama_barang', 'like', '% ' . $search . '%')
+                  ->orWhere('nama_barang', 'like', '%' . $search . '%');
             });
 
-            if ($request->subkategori) {
-                $query->where('subkategori', $request->subkategori);
-            }
-
-            if ($request->jenis) {
-                $query->where('jenis_barang', $request->jenis);
+            if ($request->kategori) {
+                $query->where('kategori', $request->kategori);
             }
         }
 
@@ -37,51 +33,29 @@ class BarangController extends Controller
             return view('staff.barang._table', compact('barangs'))->render();
         }
 
-        return view('staff.barang.index', compact('barangs', 'subkategoris'));
+        return view('staff.barang.index', compact('barangs', 'kategoris'));
     }
 
     public function create()
     {
-        // Nanti bisa tambah daftar subkategori kalau pakai dropdown
         return view('staff.barang.create');
     }
 
     public function store(Request $request)
     {
-        $rules = [
+        $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'jenis_barang' => 'required|in:habis_pakai,tetap',
-            'subkategori' => 'required|string',
-            'jumlah' => 'required|integer|min:1',
+            'kategori' => 'required|string',
             'satuan' => 'required|string',
-        ];
-        
-        if ($request->jenis_barang === 'habis_pakai') {
-            $rules['harga_satuan'] = 'required|integer|min:0';
-            $rules['tanggal_masuk'] = 'required|date';
-        } elseif ($request->jenis_barang === 'tetap') {
-            $rules['kode_barang'] = 'required|string|max:100';
-            $rules['tahun_masuk'] = 'required|digits:4';
-            $rules['tanggal_masuk'] = 'nullable|date';
-            $rules['harga_satuan'] = 'nullable|integer|min:0';
-        }
+            'ketersediaan' => 'required|integer|min:1',
+        ]);
 
-        $request->validate($rules);
-
-        $data = $request->all();
-        $data['harga_satuan'] = $request->filled('harga_satuan') ? $request->harga_satuan : null;
-        $data['tanggal_masuk'] = $request->filled('tanggal_masuk') ? $request->tanggal_masuk : null;
-
-        if ($request->jenis_barang === 'habis_pakai') {
-            $data['tahun_masuk'] = null;
-            $data['kode_barang'] = null;
-        } elseif ($request->jenis_barang === 'tetap') {
-            $data['tahun_masuk'] = $request->tahun_masuk;
-            $data['kode_barang'] = $request->kode_barang;
-            // harga_satuan biarin aja otomatis
-        }
-
-        Barang::create($data);
+        Barang::create([
+            'nama_barang' => $request->nama_barang,
+            'kategori' => $request->kategori,
+            'satuan' => $request->satuan,
+            'ketersediaan' => $request->ketersediaan, 
+        ]);
 
         return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil ditambahkan!');
     }
@@ -94,45 +68,21 @@ class BarangController extends Controller
 
     public function update(Request $request, $id)
     {
-        $rules = [
+        $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'jenis_barang' => 'required|in:habis_pakai,tetap',
-            'subkategori' => 'required|string',
-            'jumlah' => 'required|integer|min:1',
+            'kategori' => 'required|string',
             'satuan' => 'required|string',
-        ];
-
-        if ($request->jenis_barang === 'habis_pakai') {
-            $rules['harga_satuan'] = 'required|integer|min:0';
-            $rules['tanggal_masuk'] = 'required|date';
-        } elseif ($request->jenis_barang === 'tetap') {
-            $rules['kode_barang'] = 'required|string|max:100';
-            $rules['tahun_masuk'] = 'required|digits:4';
-            $rules['tanggal_masuk'] = 'nullable|date';
-            $rules['harga_satuan'] = 'nullable|integer|min:0';
-        }
-
-        $request->validate($rules);
-
-        $data = $request->all();
-        $data['harga_satuan'] = $request->filled('harga_satuan') ? $request->harga_satuan : null;
-        $data['tanggal_masuk'] = $request->filled('tanggal_masuk') ? $request->tanggal_masuk : null;
-
-        if ($request->jenis_barang === 'habis_pakai') {
-            $data['tahun_masuk'] = null;
-            $data['kode_barang'] = null;
-            $data['tanggal_masuk'] = $request->tanggal_masuk;
-        } elseif ($request->jenis_barang === 'tetap') {
-            $data['tanggal_masuk'] = $request->tanggal_masuk;
-            $data['tahun_masuk'] = $request->tahun_masuk;
-            $data['kode_barang'] = $request->kode_barang;
-            // harga_satuan biarin aja otomatis
-        }
+        ]);
 
         $barang = Barang::findOrFail($id);
-        $barang->update($data);
+        $barang->update([
+            'nama_barang' => $request->nama_barang,
+            'kategori' => $request->kategori,
+            'satuan' => $request->satuan,
+            // ketersediaan tetap dihandle lewat pengadaan ya!
+        ]);
 
-        return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil diupdate!');
+        return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -142,5 +92,4 @@ class BarangController extends Controller
 
         return redirect()->route('staff.barang.index')->with('success', 'Barang berhasil dihapus!');
     }
-
 }

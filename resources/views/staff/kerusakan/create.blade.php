@@ -9,7 +9,7 @@
         Tambah Kerusakan
       </h2>
       <p class="mt-2 md:mt-3 text-sm md:text-base leading-relaxed text-white opacity-80">
-        Silakan isi data kerusakan barang tetap yang ditemukan.
+        Silakan isi data kerusakan aset tetap yang ditemukan.
       </p>
     </div>
   </div>
@@ -38,24 +38,24 @@
     </div>
 
     <div class="px-6 py-6">
-      <form method="POST" action="{{ route('staff.kerusakan.store') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('staff.kerusakan.store') }}">
         @csrf
 
-        {{-- Pilih Barang --}}
+        {{-- Pilih Aset --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Pilih Barang Tetap</label>
-          <select id="barangSelect" name="barang_id" required
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Pilih Aset Tetap</label>
+          <select id="asetSelect" name="aset_id" required
             class="block w-full text-sm border border-blueGray-600 rounded">
-            <option value="">-- Pilih Barang --</option>
-            @foreach ($barangs as $barang)
-              <option value="{{ $barang->id }}" data-kode="{{ $barang->kode_barang }}">{{ $barang->nama_barang }}</option>
+            <option value="">-- Pilih Aset --</option>
+            @foreach ($asets as $aset)
+              <option value="{{ $aset->id }}" data-kode="{{ $aset->kode_barang }}">{{ $aset->nama_aset }}</option>
             @endforeach
           </select>
         </div>
 
-        {{-- Kode Barang (auto terisi) --}}
+        {{-- Kode Aset (auto terisi) --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Barang</label>
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Aset</label>
           <input type="text" id="kodeBarangInput" name="kode_barang" readonly
             class="block w-full text-sm border bg-blueGray-100 text-blueGray-600 rounded px-4 py-2">
         </div>
@@ -83,18 +83,19 @@
   </div>
 </div>
 @endsection
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <script>
-  new TomSelect('#barangSelect', {
+  new TomSelect('#asetSelect', {
     create: false,
     sortField: { field: "text", direction: "asc" }
   });
 
-  const barangSelect = document.getElementById('barangSelect');
+  const asetSelect = document.getElementById('asetSelect');
   const kodeBarangInput = document.getElementById('kodeBarangInput');
-  barangSelect.addEventListener('change', function () {
-    const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+  asetSelect.addEventListener('change', function () {
+    const selectedOption = asetSelect.options[asetSelect.selectedIndex];
     const kode = selectedOption.getAttribute('data-kode') || '';
     kodeBarangInput.value = kode;
   });
@@ -112,14 +113,13 @@
       showConfirmButton: false
     });
   @endif
-  
+
   document.getElementById('btnConfirmSubmit').addEventListener('click', function () {
     const form = this.closest('form');
 
-    // Cek validasi form HTML5 terlebih dahulu
     if (!form.checkValidity()) {
-      form.reportValidity(); // Tampilkan pesan error browser (untuk required)
-      return; // Stop di sini
+      form.reportValidity();
+      return;
     }
 
     Swal.fire({
@@ -133,7 +133,7 @@
       cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
-        form.submit(); // Submit hanya jika disetujui
+        form.submit();
       }
     });
   });

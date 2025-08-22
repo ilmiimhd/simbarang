@@ -48,28 +48,17 @@
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" required>
         </div>
 
-        {{-- Jenis Barang --}}
+        {{-- Kategori --}}
         <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Jenis Barang</label>
-          <select name="jenis_barang"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" required>
-            <option value="">Pilih Jenis</option>
-            <option value="habis_pakai" {{ old('jenis_barang') === 'habis_pakai' ? 'selected' : '' }}>Habis Pakai</option>
-            <option value="tetap" {{ old('jenis_barang') === 'tetap' ? 'selected' : '' }}>Tetap</option>
-          </select>
-        </div>
-
-        {{-- Subkategori --}}
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Subkategori</label>
-          <input type="text" name="subkategori" value="{{ old('subkategori') }}"
+          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kategori</label>
+          <input type="text" name="kategori" value="{{ old('kategori') }}"
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" required>
         </div>
 
-        {{-- Jumlah --}}
+        {{-- Jumlah / Ketersediaan --}}
         <div class="mb-4">
           <label class="block text-sm font-medium text-blueGray-600 mb-1">Jumlah</label>
-          <input type="number" name="jumlah" value="{{ old('jumlah') }}"
+          <input type="number" name="ketersediaan" value="{{ old('ketersediaan') }}"
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" required min="1">
         </div>
 
@@ -80,35 +69,7 @@
             class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" required>
         </div>
 
-        {{-- Tanggal Masuk (Habis Pakai) --}}
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Tanggal Masuk</label>
-          <input type="date" name="tanggal_masuk" value="{{ old('tanggal_masuk') }}"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
-        </div>
-
-        {{-- Tahun Masuk (Barang Tetap) --}}
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Tahun Masuk</label>
-          <input type="number" name="tahun_masuk" value="{{ old('tahun_masuk') }}"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500" min="1900" max="{{ date('Y') }}">
-        </div>
-
-        {{-- Harga Satuan --}}
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Harga Satuan (opsional)</label>
-          <input type="number" name="harga_satuan" value="{{ old('harga_satuan') }}"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
-        </div>
-
-        {{-- Kode Barang --}}
-        <div class="mb-6">
-          <label class="block text-sm font-medium text-blueGray-600 mb-1">Kode Barang (opsional)</label>
-          <input type="text" name="kode_barang" value="{{ old('kode_barang') }}"
-            class="w-full border px-4 py-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-lightBlue-500">
-        </div>
-
-        {{-- Tombol Aksi --}}
+        {{-- Tombol --}}
         <div class="flex justify-end gap-2">
           <a href="{{ route('staff.barang.index') }}"
             class="bg-blueGray-100 hover:bg-blueGray-200 text-blueGray-600 text-xs font-semibold px-4 py-2 rounded shadow transition">
@@ -119,7 +80,6 @@
             Simpan
           </button>
         </div>
-
       </form>
     </div>
   </div>
@@ -141,37 +101,5 @@
       });
     @endif
   </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const jenisSelect = document.querySelector('select[name="jenis_barang"]');
-      const tanggalInput = document.querySelector('input[name="tanggal_masuk"]');
-      const tahunInput = document.querySelector('input[name="tahun_masuk"]');
-      const hargaInput = document.querySelector('input[name="harga_satuan"]');
-      const kodeInput = document.querySelector('input[name="kode_barang"]');
-
-      function toggleRequired() {
-      const jenis = jenisSelect.value;
-      if (jenis === 'habis_pakai') {
-        tanggalInput.required = true;
-        tahunInput.required = false;
-        hargaInput.required = true;
-        kodeInput.required = false;
-      } else if (jenis === 'tetap') {
-        tanggalInput.required = false;
-        tahunInput.required = true;
-        hargaInput.required = false;
-        kodeInput.required = true;
-      } else {
-        tanggalInput.required = false;
-        tahunInput.required = false;
-        hargaInput.required = false;
-        kodeInput.required = false;
-      }
-    }
-
-      jenisSelect.addEventListener('change', toggleRequired);
-      toggleRequired();
-    });
-  </script>
+  
 @endsection

@@ -12,18 +12,16 @@ class KerusakanBarang extends Model
     protected $table = 'kerusakan_barang';
 
     protected $fillable = [
-        'barang_id',
-        'kode_barang',
-        'jenis_barang',
+        'aset_id',
         'kondisi',
         'deskripsi',
         'biaya_perbaikan',
         'catatan_perbaikan',
     ];
 
-    // Relasi ke tabel barang
-    public function barang()
+    // Relasi ke tabel aset
+    public function aset()
     {
-        return $this->belongsTo(Barang::class);
+        return $this->belongsTo(Aset::class);
     }
 }

@@ -13,8 +13,8 @@
   <tbody>
     @forelse ($kerusakan as $item)
       <tr class="hover:bg-blueGray-50">
-        <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->barang->nama_barang ?? '-' }}</td>
-        <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->kode_barang ?? '-' }}</td>
+        <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->aset->nama_aset ?? '-' }}</td>
+        <td class="px-6 py-4 text-sm border-t text-blueGray-700">{{ $item->aset->kode_barang ?? '-' }}</td>
         <td class="px-6 py-4 text-sm border-t capitalize">
           @php
             $warna = match($item->kondisi) {

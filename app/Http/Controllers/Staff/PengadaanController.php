@@ -3,73 +3,109 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pengadaan;
 use App\Models\Barang;
-use App\Models\KerusakanBarang;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\PengadaanExport;
-use Carbon\Carbon;
+
 
 class PengadaanController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $bulan = $request->bulan ?? date('m');
-        $tahun = $request->tahun ?? date('Y');
+        $pengadaans = Pengadaan::with('barang')->latest()->get();
+        $pengeluarans = \App\Models\Pengeluaran::with('barang')->latest()->get();
 
-        // ✅ Pembelian pakai tanggal_masuk
-        $pembelian = Barang::whereNotNull('harga_satuan')
-            ->whereMonth('tanggal_masuk', $bulan)
-            ->whereYear('tanggal_masuk', $tahun)
-            ->get();
-
-        $totalPembelian = $pembelian->sum(fn($b) => $b->jumlah * $b->harga_satuan);
-
-        // Perbaikan tetap pakai updated_at
-        $perbaikan = KerusakanBarang::where('kondisi', 'baik')
-            ->whereNotNull('biaya_perbaikan')
-            ->whereMonth('updated_at', $bulan)
-            ->whereYear('updated_at', $tahun)
-            ->get();
-
-        $totalPerbaikan = $perbaikan->sum('biaya_perbaikan');
-
-        $totalKeseluruhan = $totalPembelian + $totalPerbaikan;
-
-        return view('staff.pengadaan.index', compact(
-            'pembelian', 'perbaikan', 'totalPembelian', 'totalPerbaikan', 'totalKeseluruhan', 'bulan', 'tahun'
-        ));
+        return view('staff.pengadaan.index', compact('pengadaans', 'pengeluarans'));
     }
 
-    public function export(Request $request)
+    public function create()
     {
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $barangs = Barang::all();
+        return view('staff.pengadaan.create', compact('barangs'));
+    }
 
-        Carbon::setLocale('id');
-        $namaBulan = Carbon::createFromDate(null, $bulan, null)->translatedFormat('F');
+    public function store(Request $request)
+    {
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'jumlah' => 'required|integer|min:1',
+            'harga_satuan' => 'nullable|integer|min:0',
+            'tanggal_pengadaan' => 'required|date',
+            'supplier' => 'nullable|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
 
-        // ✅ Pembelian pakai tanggal_masuk
-        $pembelian = Barang::whereNotNull('harga_satuan')
-            ->whereMonth('tanggal_masuk', $bulan)
-            ->whereYear('tanggal_masuk', $tahun)
-            ->get();
+        $total = $request->harga_satuan ? $request->jumlah * $request->harga_satuan : null;
 
-        $totalPembelian = $pembelian->sum(fn($item) => $item->jumlah * $item->harga_satuan);
+        $pengadaan = Pengadaan::create([
+            'barang_id' => $request->barang_id,
+            'jumlah' => $request->jumlah,
+            'harga_satuan' => $request->harga_satuan,
+            'total_harga' => $total,
+            'supplier' => $request->supplier,
+            'tanggal_pengadaan' => $request->tanggal_pengadaan,
+            'keterangan' => $request->keterangan,
+        ]);
 
-        // Perbaikan pakai updated_at
-        $perbaikan = KerusakanBarang::where('kondisi', 'baik')
-            ->whereMonth('updated_at', $bulan)
-            ->whereYear('updated_at', $tahun)
-            ->get();
+        // Update ketersediaan barang
+        $barang = Barang::find($request->barang_id);
+        $barang->increment('ketersediaan', $request->jumlah);
 
-        $totalPerbaikan = $perbaikan->sum('biaya_perbaikan');
-        $totalKeseluruhan = $totalPembelian + $totalPerbaikan;
+        return redirect()->route('staff.pengadaan.index')->with('success', 'Data pengadaan berhasil ditambahkan!');
+    }
 
-        return Excel::download(
-            new PengadaanExport($pembelian, $perbaikan, $totalPembelian, $totalPerbaikan, $totalKeseluruhan, $bulan, $tahun, $namaBulan),
-            'Laporan_Pengadaan_' . now()->format('Ym') . '.xlsx'
-        );
+    public function edit($id)
+    {
+        $pengadaan = Pengadaan::findOrFail($id);
+        $barangs = Barang::all();
+        return view('staff.pengadaan.edit', compact('pengadaan', 'barangs'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $pengadaan = Pengadaan::findOrFail($id);
+
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'jumlah' => 'required|integer|min:1',
+            'harga_satuan' => 'nullable|integer|min:0',
+            'tanggal_pengadaan' => 'required|date',
+            'supplier' => 'nullable|string|max:255',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $oldJumlah = $pengadaan->jumlah;
+
+        $total = $request->harga_satuan ? $request->jumlah * $request->harga_satuan : null;
+
+        $pengadaan->update([
+            'barang_id' => $request->barang_id,
+            'jumlah' => $request->jumlah,
+            'harga_satuan' => $request->harga_satuan,
+            'total_harga' => $total,
+            'supplier' => $request->supplier,
+            'tanggal_pengadaan' => $request->tanggal_pengadaan,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        // Update stok barang: rollback jumlah lama, tambah jumlah baru
+        $barang = Barang::find($request->barang_id);
+        $barang->ketersediaan = $barang->ketersediaan - $oldJumlah + $request->jumlah;
+        $barang->save();
+
+        return redirect()->route('staff.pengadaan.index')->with('success', 'Data pengadaan berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $pengadaan = Pengadaan::findOrFail($id);
+
+        // Rollback stok barang
+        $barang = Barang::find($pengadaan->barang_id);
+        $barang->decrement('ketersediaan', $pengadaan->jumlah);
+
+        $pengadaan->delete();
+
+        return redirect()->route('staff.pengadaan.index')->with('success', 'Data pengadaan berhasil dihapus!');
     }
 }

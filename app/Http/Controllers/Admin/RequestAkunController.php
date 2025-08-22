@@ -24,7 +24,7 @@ class RequestAkunController extends Controller
 
         $requests = $query->get();
 
-        // Untuk komponen header
+
         $jumlahRequestPending = DB::table('requests')->where('status', 'pending')->count();
         $jumlahRequestApproved = DB::table('requests')->where('status', 'approved')->count();
         $jumlahRequestRejected = DB::table('requests')->where('status', 'rejected')->count();
@@ -78,7 +78,7 @@ class RequestAkunController extends Controller
 
         $password = Str::random(10);
 
-        // Buat akun staff
+        // Buat akun staff (update ke table users)
         $user = User::create([
             'name'     => $request->nama,
             'nip'      => $request->nip,

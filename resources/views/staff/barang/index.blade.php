@@ -33,21 +33,15 @@
     <div class="rounded-t px-4 py-3 border-b border-blueGray-100 bg-blueGray-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <h3 class="font-semibold text-base text-blueGray-700">Tabel Barang</h3>
       <div class="flex flex-wrap items-center gap-2">
-        {{-- Dropdown Subkategori --}}
-        <select x-model="subkategori" @change="fetchTable()"
+        {{-- Dropdown kategori --}}
+        <select x-model="kategori" @change="fetchTable()"
           class="px-2 py-2 pr-8 border border-blueGray-200 rounded text-xs focus:outline-none">
-          <option value="">Semua Subkategori</option>
-          @foreach ($subkategoris as $kategori)
+          <option value="">Semua kategori</option>
+          @foreach ($kategoris as $kategori)
             <option value="{{ $kategori }}">{{ $kategori }}</option>
           @endforeach
         </select>
-        {{-- Dropdown Jenis Barang --}}
-        <select x-model="jenis" @change="fetchTable()"
-          class="px-2 py-2 pr-8 border border-blueGray-200 rounded text-xs focus:outline-none">
-          <option value="">Semua Jenis</option>
-          <option value="habis_pakai">Habis Pakai</option>
-          <option value="tetap">Tetap</option>
-        </select>
+        
         {{-- Input Search --}}
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -80,13 +74,11 @@
   function liveBarang() {
     return {
       search: '{{ request('search') }}',
-      subkategori: '',
-      jenis: '',
+      kategori: '',
       fetchTable() {
         const params = new URLSearchParams({
           search: this.search,
-          subkategori: this.subkategori,
-          jenis: this.jenis
+          kategori: this.kategori,
         });
 
         fetch(`{{ route('staff.barang.index') }}?${params.toString()}`, {

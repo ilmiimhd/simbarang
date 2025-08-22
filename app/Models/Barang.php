@@ -13,14 +13,18 @@ class Barang extends Model
 
     protected $fillable = [
         'nama_barang',
-        'jenis_barang',
-        'subkategori',
-        'jumlah',
+        'kategori',
         'satuan',
-        'tahun_masuk',
-        'tanggal_masuk',   
-        'harga_satuan',
-        'kode_barang',
+        'ketersediaan',
     ];
 
+    public function pengadaans()
+    {
+        return $this->hasMany(PengadaanBarang::class);
+    }
+
+    public function pengeluarans()
+    {
+        return $this->hasMany(PengeluaranBarang::class);
+    }
 }

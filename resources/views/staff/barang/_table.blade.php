@@ -2,11 +2,10 @@
   <thead class="sticky top-0 bg-blueGray-100 z-0">
     <tr class="text-blueGray-600 text-xs uppercase">
       <th class="px-6 py-3 text-left">Nama</th>
-      <th class="px-6 py-3 text-left">Jenis</th>
-      <th class="px-6 py-3 text-left">Subkategori</th>
-      <th class="px-6 py-3 text-left">Jumlah</th>
+      <th class="px-6 py-3 text-left">Kategori</th>
       <th class="px-6 py-3 text-left">Satuan</th>
-      <th class="px-6 py-3 text-left">Masuk</th>
+      <th class="px-6 py-3 text-left">Ketersediaan</th>
+      <th class="px-6 py-3 text-left">Tanggal Masuk</th>
       <th class="px-6 py-3 text-left">Aksi</th>
     </tr>
   </thead>
@@ -14,18 +13,11 @@
     @forelse ($barangs as $barang)
       <tr class="hover:bg-blueGray-50">
         <td class="px-6 py-4 text-sm text-blueGray-700 border-t border-blueGray-100">{{ $barang->nama_barang }}</td>
-        <td class="px-6 py-4 text-sm capitalize border-t border-blueGray-100">{{ str_replace('_', ' ', $barang->jenis_barang) }}</td>
-        <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->subkategori }}</td>
-        <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->jumlah }}</td>
+        <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->kategori }}</td>
         <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->satuan }}</td>
+        <td class="px-6 py-4 text-sm border-t border-blueGray-100">{{ $barang->ketersediaan }}</td>
         <td class="px-6 py-4 text-sm border-t border-blueGray-100">
-          @if ($barang->jenis_barang === 'habis_pakai')
-            {{ \Carbon\Carbon::parse($barang->tanggal_masuk)->format('d-m-Y') }}
-          @elseif ($barang->jenis_barang === 'tetap')
-            {{ $barang->tahun_masuk }}
-          @else
-            -
-          @endif
+          {{ $barang->created_at->format('d-m-Y') }}
         </td>
         <td class="px-6 py-4 border-t border-blueGray-100">
           <div class="flex items-center space-x-2">
@@ -46,7 +38,7 @@
       </tr>
     @empty
       <tr>
-        <td colspan="7" class="text-center text-blueGray-400 text-sm py-4">Belum ada data barang.</td>
+        <td colspan="6" class="text-center text-blueGray-400 text-sm py-4">Belum ada data barang.</td>
       </tr>
     @endforelse
   </tbody>

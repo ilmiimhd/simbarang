@@ -48,10 +48,6 @@
         {{-- Divider --}}
         <hr class="mt-2 mb-1 md:min-w-full" />
 
-        {{-- Menu Staff --}}
-        <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
-          Menu Staff
-        </h6>
         <ul class="md:flex-col md:min-w-full flex flex-col list-none">
 
           {{-- Dashboard --}}
@@ -63,12 +59,47 @@
             </a>
           </li>
 
+          {{-- === Pengadaan Habis Pakai === --}}
+          <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
+            Pengadaan Habis Pakai
+          </h6>
+
           {{-- Barang --}}
           <li class="items-center">
             <a href="{{ route('staff.barang.index') }}"
               class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.barang.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
-              <i class="fas fa-boxes mr-2 text-sm {{ request()->routeIs('staff.barang.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              <i class="fas fa-box mr-2 text-sm {{ request()->routeIs('staff.barang.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
               Barang
+            </a>
+          </li>
+
+          <li class="items-center">
+            <a href="{{ route('staff.pengadaan.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.pengadaan.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-shopping-cart mr-2 text-sm {{ request()->routeIs('staff.pengadaan.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Pengadaan
+            </a>
+          </li>
+
+          <li class="items-center">
+            <a href="{{ route('staff.report.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.report.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-receipt mr-2 text-sm {{ request()->routeIs('staff.report.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Laporan Pengadaan
+            </a>
+          </li>
+
+          {{-- === Sensus Aset Tetap === --}}
+          <h6 class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block mt-6 mb-2 px-4">
+            Sensus Aset Tetap
+          </h6>
+
+          {{-- Inventaris Aset --}}
+          <li class="items-center">
+            <a href="{{ route('staff.aset.index') }}"
+              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.aset.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
+              <i class="fas fa-box-open mr-2 text-sm {{ request()->routeIs('staff.aset.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              Inventaris Aset
             </a>
           </li>
 
@@ -76,17 +107,8 @@
           <li class="items-center">
             <a href="{{ route('staff.kerusakan.index') }}"
               class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.kerusakan.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
-              <i class="fas fa-tools mr-2 text-sm {{ request()->routeIs('staff.kerusakan.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
+              <i class="fas fa-exclamation-triangle mr-2 text-sm {{ request()->routeIs('staff.kerusakan.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
               Kerusakan
-            </a>
-          </li>
-
-          {{-- Pengadaan --}}
-          <li class="items-center">
-            <a href="{{ route('staff.pengadaan.index') }}"
-              class="text-xs uppercase py-3 font-bold block {{ request()->routeIs('staff.pengadaan.index') ? 'text-lightBlue-500 hover:text-lightBlue-600' : 'text-blueGray-700 hover:text-blueGray-500' }}">
-              <i class="fas fa-money-bill-wave mr-2 text-sm {{ request()->routeIs('staff.pengadaan.index') ? 'opacity-75' : 'text-blueGray-300' }}"></i>
-              Pengadaan
             </a>
           </li>
 
