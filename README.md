@@ -60,11 +60,6 @@ Tested features include:
 
 ---
 
-## 📸 Screenshots
-(Add your system screenshots here)
-
----
-
 ## 📚 What I Learned
 - Importance of structured requirement analysis  
 - Real implementation of SDLC (Waterfall model)  
